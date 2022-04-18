@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link rel="stylesheet" href="../dist/css/mustard-ui.min.css" />
+        <link rel="stylesheet" href="../dist/css/style.css" />
+        <title>Unit 12</title>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>
+                <a
+                    href="https://tproger.ru/translations/javascript-arrays-best-practices/"
+                    target="_blank"
+                    >Что нужно знать про массивы в JavaScript</a
+                >
+            </h1>
+            <section class="start">
+                <p>
+                    Когда дело доходит до прохода по массиву, поиску элементов и
+                    так далее, вероятнее всего, для этого есть соответствующий
+                    метод массива. Однако часть методов остаётся в тени, поэтому
+                    в этой статье поговорим о полезных методах массивов в
+                    JavaScript.
+                </p>
+                <pre>
+            function flatDeep(arr) {<br>
+            &nbsp;return arr.reduce((flattenArray, element) => {<br>
+            &nbsp;&nbsp;return Array.isArray(element)<br>
+            &nbsp;&nbsp;&nbsp; ? [...flattenArray, ...flatDeep(element)]<br>
+            &nbsp;&nbsp;&nbsp; : [flattenArray, element]<br>
+            &nbsp;}, [])<br>
+    }<br>
+    flatDeep([1, 2, 3, [4, [[[5, [6, 7]]]], 8]])    // [1,2,3,4,5,6,7,8]
+             <br><br>
+            <span>Пример использования метода reduce для «сглаживания» массива</span> 
+           
+        </pre>
+                <button class="button-primary b-start">Результат</button>
+                <div class="out-start"></div>
+            </section>
+            <h2><a>Основа основ</a></h2>
+            <!-- method map -->
+            <section class="map-1">
+                <h2>метод Map.</h2>
+                <p>
+                    Вероятнее всего, вы часто сталкивались с этим методом. Его
+                    используют, когда нужно поэлементно трансформировать массив
+                    в новый.
+                </p>
+
+                <p>
+                    Метод map() принимает всего один параметр — функцию, которая
+                    вызывается при каждой итерации по массиву. Метод возвращает
+                    новый массив, а не изменяет существующий.
+                </p>
+                <pre>
+            const numbers = [1, 2, 3, 4]
+            <br>
+            const numbersPlusOne = numbers.map(n => n + 1)
+        </pre>
+
+                <button class="button-primary b-1_1">Результат</button>
+                <div class="out-1_1"></div>
+            </section>
+
+            <section class="map-1_2">
+                <p>
+                    Подобным образом можно получить массив, содержащий в себе
+                    только одно свойство объекта:
+                </p>
+                <pre>
+            const allActivities = [<br>
+ &nbsp;&nbsp;{ title: 'My activity', coordinates: [ 50.123, 3.291] },<br>
+ &nbsp;&nbsp;{ title: 'Another activity', coordinates: [ 1.238, 4.292] }<br>
+]<br>
+<br>
+const allCoordinates = allActivities.map(activity => activity.coordinates)<br>
+console.log(allCoordinates) // [[ 50.123, 3.291], [ 1.238, 4.292]]
+        </pre>
+                <button class="button-primary b-1_2">Результат</button>
+                <div class="out-1_2"></div>
+                <p>
+                    Поэтому, если нужно поэлементно трансформировать массив в
+                    новый — используйте <b>map()</b>.
+                </p>
+            </section>
+            <!-- end method map -->
+
+            <!-- method filter -->
+            <section class="filter-2_1">
+                <h2>Метод filter</h2>
+                <p>
+                    В принципе имя метода говорит само за себя: он используется
+                    тогда, когда нужно произвести фильтрацию массива.
+                </p>
+                <p>
+                    Как и map(), метод filter() принимает только один параметр —
+                    функцию, которая вызывается при каждой итерации. Функция
+                    должна возвращать булево значение:
+                </p>
+                <ul>
+                    <li><b>true — элемент остаётся в новом массиве,</b></li>
+                    <li><b>false — элемент не остаётся в новом массиве.</b></li>
+                </ul>
+                <p>
+                    После этого вы получаете отфильтрованный массив с нужными
+                    вам элементами.
+                </p>
+                <p>К примеру, сохраним только нечётные числа в массиве:</p>
+                <pre>
+            const numbers = [1, 2, 3, 4, 5, 6]<br>
+const oddNumbers = numbers.filter(n => n % 2 !== 0)
+        </pre>
+                <button class="button-primary b-2_1">Результат</button>
+                <div class="out-2_1"></div>
+            </section>
+
+            <section class="filter-2_2">
+                <p>
+                    Или же можно удалять строго определённые элементы массива:
+                </p>
+                <pre>
+            const participants = [<br>
+               &nbsp;&nbsp;{ id: 'a3f47', username: 'john' },<br>
+               &nbsp;&nbsp;{ id: 'fek28', username: 'mary' },<br>
+               &nbsp;&nbsp;{ id: 'n3j44', username: 'sam' },<br>
+            ]<br>
+            <br>
+            function removeParticipant(participants, id) {<br>
+ &nbsp;&nbsp;return participants.filter(participant => participant.id !== id)<br>
+}<br>
+
+console.log(removeParticipant(participants, 'a3f47')) <br>
+            //  [{ id: 'fek28', username: 'mary' }, { id: 'n3j44',
+            username: 'sam' }];
+        </pre>
+                <button class="button-primary b-2_2">Результат</button>
+                <div class="out-2_2"></div>
+                <p>
+                    result: <br /><b>
+                        [{ id: 'fek28', username: 'mary' },<br />
+                        { id: 'n3j44', username: 'sam' }];
+                    </b>
+                </p>
+            </section>
+            <!-- end method filter -->
+
+            <!-- method reduce -->
+            <section class="reduce-3_1">
+                <h2>метод reduce</h2>
+                <div class="out-3_1">
+                    <p>
+                        Возможно, это довольно сложный для понимания метод. Но
+                        однажды вы поймёте, сколько крутых штук можно сделать с
+                        его помощью.
+                    </p>
+                    <p>
+                        Метод reduce() предназначен для комбинации значений
+                        массива в одно значение. Метод принимает два параметра.
+                        Первый из них — callback-функция (reducer), второй —
+                        первичное значение, которое является необязательным и
+                        по-умолчанию является первым элементом массива.
+                        Callback-функция принимает 4 аргумента:
+                    </p>
+                    <ul>
+                        <li>
+                            accumulator (он хранит в себе промежуточный
+                            результат итераций),
+                        </li>
+                        <li>текущее значение массива,</li>
+                        <li>текущий index,</li>
+                        <li>сам массив.</li>
+                    </ul>
+                    <p>
+                        В большинстве случаев вам достаточно будет первых двух
+                        аргументов: промежуточного результата и текущего
+                        значения.
+                    </p>
+                    <p>
+                        Поначалу это может звучать сложно, но на примерах всё
+                        разъяснится. Вот самый простой из них:
+                    </p>
+                    <pre>
+const numbers = [37, 12, 28, 4, 9]<br>
+const total = numbers.reduce((total, n) => total + n)<br>
+console.log(total) // 90
+            </pre>
+                    <p>
+                        При первой итерации переменная total (промежуточный
+                        результат) принимает значение 37. Возвращаемое значение
+                        равно (37 + n), где n равняется 12, т. е. значение равно
+                        49. При второй итерации промежуточный результат равен 49
+                        и к нему прибавляется 28. Теперь total равен 77. И так
+                        далее.
+                    </p>
+                    <p>
+                        Метод reduce() настолько хорош, что с его помощью можно
+                        создавать остальные методы массива, например map() или
+                        filter():
+                    </p>
+                    <pre>
+                const map = (arr, fn) => {<br>
+ &nbsp;&nbsp;return arr.reduce((mappedArr, element) => {<br>
+   &nbsp;&nbsp;&nbsp;&nbsp;return [...mappedArr, fn(element)]<br>
+ &nbsp;&nbsp;}, [])<br>
+}<br>
+
+console.log(map([1, 2, 3, 4], n => n + 1)) // [2, 3, 4, 5]<br>
+<br>
+const filter = (arr, fn) => {<br>
+ &nbsp;&nbsp;return arr.reduce((filteredArr, element) => {<br>
+   &nbsp;&nbsp;&nbsp;&nbsp;return fn(element) ? [...filteredArr] : [...filteredArr, element]<br>
+&nbsp; }, [])<br>
+}<br>
+
+console.log(filter([1, 2, 3, 4, 5, 6], n => n % 2 === 0)) // [1, 3, 5]
+            </pre>
+
+                    <button class="button-primary b-3_1">Результат</button>
+                    <div class="out-3_1_a"></div>
+                    <div class="out-3_1_b"></div>
+                </div>
+            </section>
+
+            <section class="reduce-3_2">
+                <p>
+                    В случае map() запускается функция, результат которой
+                    добавляется в конец accumulator’а с помощью
+                    spread-оператора. В filter() почти то же самое, за
+                    исключением того, что на каждом элементе запускается
+                    filter-функция. Если эта функция возвращает true, то
+                    возвращается предыдущий массив (промежуточное значение),
+                    иначе элемент добавляется в конец массива.
+                </p>
+                <p>
+                    Вот более сложный пример: функция, которая «сглаживает»
+                    массив рода [1, 2, 3, [4, [[[5, [6, 7]]]], 8]] в
+                </p>
+                одномерный массив [1, 2, 3, 4, 5, 6, 7, 8].
+                <pre>
+    function flatDeep(arr) {<br>
+ &nbsp;&nbsp;return arr.reduce((flattenArray, element) => {<br>
+   &nbsp;&nbsp;&nbsp;&nbsp;return Array.isArray(element) ? [...flattenArray, ...flatDeep(element)] : [...flattenArray,
+    element]<br>
+ }, [])<br>
+}<br>
+<br>
+console.log(flatDeep([1, 2, 3, [4, [[[5, [6, 7]]]], 8]])) // [1, 2, 3, 4, 5, 6, 7, 8]
+</pre>
+                <button class="button-primary b-3_2">Результат</button>
+                <div class="out-3_2"></div>
+                <p>Принцип работы схож с map(), только с щепоткой рекурсии.</p>
+            </section>
+            <!-- end method reduce -->
+
+            <!-- method spread -->
+            <section class="spread-4_1">
+                <h2>Spread оператор (стандарт ES2015)</h2>
+                <p>
+                    Несмотря на то что оператор не является методом, с его
+                    помощью можно добиться многого при работе с массивами.
+                    Например, можно делать копии массивов или же объединять
+                    несколько массивов в один.
+                </p>
+                <pre>
+            const numbers = [1, 2, 3]<br>
+const numbersCopy = [...numbers]<br>
+            <br>
+console.log(numbersCopy) // [1, 2, 3]<br>
+<br>
+const otherNumbers = [4, 5, 6]<br>
+const numbersConcatenated = [...numbers, ...otherNumbers]<br>
+<br>
+console.log(numbersConcatenated) // [1, 2, 3, 4, 5, 6]
+        </pre>
+                <button class="button-primary b-4_1a">Результат</button>
+                <div class="out-4_1a"></div>
+                <div class="out-4_1a_1"></div>
+                <p>
+                    Обратите внимание, что этот оператор создаёт поверхностную
+                    копию исходного массива. Но что значит?
+                </p>
+                <p>
+                    При поверхностном копировании элементы массива дублируются
+                    минимальным образом. Если, скажем, массив состоит только из
+                    примитивов (числа, строки, булевы значения), то это не
+                    вызовет никаких проблем. Но нельзя сказать то же самое о
+                    массиве объектов. При поверхностном копировании объектов в
+                    массиве созданные (продублированные) элементы ссылаются на
+                    оригиналы. Следовательно, если вы попытаетесь изменить
+                    объект в массиве, то изменения будут отражаться и на всех
+                    продублированных с него объектах (так же и в обратную
+                    сторону).
+                </p>
+                <pre>
+    const arr = ['foo', 42, { name: 'Thomas' }]<br>
+let copy = [...arr]<br>
+<br>
+copy[0] = 'bar'<br>
+<br>
+console.log(arr) // Никаких изменений: ["foo", 42, { name: "Thomas" }]<br>
+console.log(copy) // ["bar", 42, { name: "Thomas" }]<br>
+<br>
+
+</pre>
+                <button class="button-primary b-4_1b">Результат</button>
+                <div class="out-4_1b_1"></div>
+                <div class="out-4_1b_2"></div>
+                <pre>
+           copy[2].name = 'Hello'<br>
+<br>
+console.log(arr) // /!\ ИЗМЕНЕНИЯ ["foo", 42, { name: "Hello" }]<br>
+console.log(copy) // ["bar", 42, { name: "Hello" }]<br>
+        </pre>
+                <button class="button-primary b-4_1b_1">Результат</button>
+                <div class="out-4_1b_3"></div>
+                <div class="out-4_1b_4"></div>
+                <p>
+                    Поэтому если вам нужно сделать полную копию массива,
+                    содержащего объекты, то можно воспользоваться функцией
+                    cloneDeep из библиотеки lodash.
+                </p>
+            </section>
+            <!-- end method spread -->
+
+            <h2>Углубляемся</h2>
+            <p>
+                Ниже будут описаны методы, которые могут оказаться чрезвычайно
+                полезными в определённых ситуациях, например поиск элемента или
+                извлечение подмассива из массива.
+            </p>
+
+            <!-- method includes -->
+            <section class="includes-5_1">
+                <h2>includes (стандарт ES2016)</h2>
+                <p>
+                    Часто ли вы использовали indexOf(), чтобы узнать о наличии
+                    чего-либо в массиве? Ужасный способ, не правда ли? К
+                    счастью, существует метод includes(). Он принимает всего
+                    один параметр — искомый элемент — и возвращает true/false в
+                    зависимости от результата поиска.
+                </p>
+                <pre>
+            const sports = ['football', 'archery', 'judo']<br>
+const hasFootball = sports.includes('football')<br>
+console.log(hasFootball) // true
+        </pre>
+                <button class="button-primary b-5_1">Результат</button>
+                <div class="out-5_1"></div>
+            </section>
+            <!-- end method includes -->
+
+            <!-- method concat -->
+            <section class="concat-6_1">
+                <h2>concat</h2>
+                <p>Этот метод объединяет два или более массивов.</p>
+                <pre>
+            const numbers = [1, 2, 3]<br>
+            const otherNumbers = [4, 5, 6]<br>
+const numbersConcatenated = numbers.concat(otherNumbers)<br>
+
+console.log(numbersConcatenated) // [1, 2, 3, 4, 5, 6]<br>
+
+
+        </pre>
+                <button class="button-primary b-6_1">Результат</button>
+                <div class="out-6_1"></div>
+                <pre>
+           // Вы можете объединять любое количество массивов <br>
+function concatAll(arr, ...arrays) {<br>
+ &nbsp;&nbsp;return arr.concat(...arrays)<br>
+}<br>
+<br>
+console.log(concatAll([1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12])) // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        </pre>
+                <button class="button-primary b-6_1a">Результат</button>
+                <div class="out-6_1a"></div>
+            </section>
+            <!-- end method concat -->
+
+            <!-- method forEach -->
+            <section class="forEach-7_1">
+                <h2>forEach</h2>
+                <p>
+                    Этот метод нужен, когда вам необходимо выполнить что-либо
+                    для каждого элемента массива. Метод принимает функцию в
+                    качестве параметра. Сама функция принимает 3 параметра:
+                    текущее значение, индекс и сам массив:
+                </p>
+                <pre>
+            const numbers = [1, 2, 3, 4, 5]<br>
+            numbers.forEach(console.log)<br>
+            // 1 0 [ 1, 2, 3 ]<br>
+            // 2 1 [ 1, 2, 3 ]<br>
+            // 3 2 [ 1, 2, 3 ]<br>
+        </pre>
+                <button class="button-primary b-7">Результат</button>
+                <div class="out-7"></div>
+            </section>
+            <!-- end method forEach -->
+
+            <!-- method indexOf -->
+            <section class="indexOf-8">
+                <h2>indexOf</h2>
+                <p>
+                    Этот метод возвращает индекс первого вхождения элемента в
+                    массиве. indexOf() так же часто используется в качестве
+                    проверки на наличие определённого элемента в массиве, хотя
+                    делать так не рекомендуется (ведь существует includes()).
+                </p>
+                <pre>
+            const sports = ['football', 'archery', 'judo']<br>
+const judoIndex = sports.indexOf('judo')<br>
+console.log(judoIndex) // 2 <br>
+        </pre>
+                <button class="button-primary b-8_1">Результат</button>
+                <div class="out-8_1"></div>
+            </section>
+            <!-- end method indexOf -->
+
+            <!-- method find -->
+            <section class="find-9">
+                <h2>find</h2>
+                <p>
+                    Метод find() идентичен методу filter(). Ему тоже нужно
+                    передавать функцию, которая проверяет каждый элемент
+                    массива. Но в отличие от filter(), метод find() прекращает
+                    поиск, когда находит первый элемент, удовлетворяющий условию
+                    проверяющей функции.
+                </p>
+                <pre>
+            const users = [<br>
+ &nbsp;&nbsp;{ id: 'af35', name: 'john' },<br>
+ &nbsp;&nbsp;{ id: '6gbe', name: 'mary' },<br>
+ &nbsp;&nbsp;{ id: '932j', name: 'gary' },<br>
+]<br>
+<br>
+const user = users.find(user => user.id === '6gbe')<br>
+<br>
+console.log(user) // { id: '6gbe', name: 'mary' }<br>
+        </pre>
+                <button class="button-primary b-9_1">Результат</button>
+                <div class="out-9_1"></div>
+                <p>
+                    Используйте filter(), чтобы пройтись по всему массиву, а
+                    find() — чтобы найти уникальный элемент в нём.
+                </p>
+            </section>
+            <!-- end method find -->
+
+            <!-- method findIndex -->
+            <section class="findIndex-10">
+                <h2>findIndex</h2>
+                <p>
+                    Метод полностью идентичен предыдущему методу find(), за
+                    исключением того, что findIndex() возвращает индекс
+                    конкретного искомого элемента.
+                </p>
+                <pre>
+            const users = [<br>
+ &nbsp;&nbsp;{ id: 'af35', name: 'john' },<br>
+ &nbsp;&nbsp;{ id: '6gbe', name: 'mary' },<br>
+ &nbsp;&nbsp;{ id: '932j', name: 'gary' },<br>
+]<br>
+<br>
+const user = users.findIndex(user => user.id === '6gbe')<br>
+
+console.log(user) // 1 <br>
+        </pre>
+                <p>
+                    Возможно вы скажете: «Эй! Этот метод же делает тоже самое,
+                    что и indexOf()!».
+                </p>
+                <p><b>Не совсем.</b></p>
+                <p>
+                    Передаваемый параметр в indexOf() — это просто примитив
+                    (число, строка, булево значение, null, undefined или просто
+                    символ), в то время как параметр в findIndex() — это
+                    callback-функция.
+                </p>
+                <p>
+                    Поэтому если нужно найти индекс элемента в массиве
+                    примитивов, используйте indexOf(). В других же случаях
+                    (массивы объектов) берите findIndex().
+                </p>
+                <button class="button-primary b-10">Результат</button>
+                <div class="out-10"></div>
+            </section>
+            <!-- end method findIndex -->
+
+            <!-- method slice -->
+            <section class="slice-11">
+                <h2>slice</h2>
+                <p>
+                    Метод используется в тех случаях, когда необходимо извлечь
+                    подмассив из массива. Однако с ним нужно быть осторожным.
+                    Как и spread-оператор, этот метод возвращает поверхностную
+                    копию подмассива.
+                </p>
+                <p>
+                    Как говорилось в начале статьи, во многих случаях циклы
+                    можно заменить.
+                </p>
+                <p>
+                    Допустим, через API вы получили какое-то количество
+                    сообщений, но хотите отобразить только 5 из них. Ниже
+                    приведены 2 способа: первый — с использованием цикла, второй
+                    — с использованием slice.
+                </p>
+                <pre>
+            // «Традиционный» способ реализации: <br>
+// Определить количество сообщений для использования в цикле <br>
+
+const nbMessages = messages.length < 5 ? messages.length : 5 <br>
+let messagesToShow = [] <br>
+for (let i = 0; i < nbMessages; i++) { <br>
+ &nbsp;&nbsp;messagesToShow.push(posts[i]) <br>
+} <br>
+
+// Даже если массив содержит меньше 5 элементов, <br>
+// slice вернёт поверхностную копию всего массива <br>
+const messagesToShow = messages.slice(0, 5) <br>
+        </pre>
+                <button class="button-primary b-11">Результат</button>
+                <div class="out-11"></div>
+            </section>
+            <!-- end method slice -->
+
+            <!-- method some -->
+            <section class="some-12">
+                <h2>some</h2>
+                <p>
+                    Используйте этот метод чтобы узнать, удовлетворяет ли
+                    условию хотя бы один из элементов массива. Как и map(),
+                    fitler() и find(), метод some принимает callback-функцию как
+                    единственный параметр. Он возвращает true при наличии в
+                    массиве хотя бы одного нужного элемента и false — при
+                    отсутствии. Метод хорошо подходит для работы с разрешениями:
+                </p>
+                <pre>
+            const users = [<br>
+ &nbsp;{<br>
+   &nbsp;&nbsp;id: 'fe34',<br>
+   &nbsp;&nbsp;permissions: ['read', 'write'],<br>
+ &nbsp;},<br>
+ &nbsp;{<br>
+   &nbsp;&nbsp;id: 'a198',<br>
+   &nbsp;&nbsp;permissions: [],<br>
+ &nbsp;},<br>
+ &nbsp;{<br>
+   &nbsp;&nbsp;id: '18aa',<br>
+   &nbsp;&nbsp;permissions: ['delete', 'read', 'write'],<br>
+ &nbsp;}<br>
+]<br>
+<br>
+const hasDeletePermission = users.some(user =><br>
+ user.permissions.includes('delete')<br>
+)<br>
+<br>
+console.log(hasDeletePermission) // true <br>
+        </pre>
+                <button class="button-primary b-12">Результат</button>
+                <div class="out-12"></div>
+            </section>
+            <!-- end method some -->
+
+            <!-- method every -->
+            <section class="every-13">
+                <h2>every</h2>
+                <p>
+                    Идентичен предыдущему методу, но возвращает true в случае,
+                    если все элементы проходят проверку (а не минимум один).
+                </p>
+                <pre>
+            const users = [<br>
+ &nbsp;{<br>
+   &nbsp;&nbsp;id: 'fe34',<br>
+   &nbsp;&nbsp;permissions: ['read', 'write'],<br>
+ &nbsp;},<br>
+ &nbsp;{<br>
+   &nbsp;&nbsp;id: 'a198',<br>
+   &nbsp;&nbsp;permissions: [],<br>
+ &nbsp;},<br>
+ &nbsp;{<br>
+   &nbsp;&nbsp;id: '18aa',<br>
+   &nbsp;&nbsp;permissions: ['delete', 'read', 'write'],<br>
+ &nbsp;}<br>
+]<br>
+<br>
+const hasAllReadPermission = users.every(user =><br>
+ user.permissions.includes('read')<br>
+)<br>
+
+console.log(hasAllReadPermission) // false
+        </pre>
+                <button class="button-primary b-13">Результат</button>
+                <div class="out-13"></div>
+            </section>
+            <!-- end method every -->
+
+            <!-- method flat -->
+            <section class="flat-14">
+                <h2>flat (стандарт ES2019)</h2>
+                <p>
+                    Этот метод — новинка в мире JavaScript. flat() создаёт новый
+                    массив из всех подмассивов в нём. Он принимает один параметр
+                    — глубину «сглаживания» массива:
+                </p>
+                <pre>
+            const numbers = [1, 2, [3, 4, [5, [6, 7]], [[[[8]]]]]] <br>
+
+const numbersflattenOnce = numbers.flat()<br>
+console.log(numbersflattenOnce) // [1, 2, 3, 4, Array[2], Array[1]]<br>
+<br>
+const numbersflattenTwice = numbers.flat(2)<br>
+console.log(numbersflattenTwice) // [1, 2, 3, 4, 5, Array[2], Array[1]]<br>
+<br>
+const numbersFlattenInfinity = numbers.flat(Infinity)<br>
+console.log(numbersFlattenInfinity) // [1, 2, 3, 4, 5, 6, 7, 8]<br>
+        </pre>
+                <button class="button-primary b-14">Результат</button>
+                <div class="out-14a"></div>
+                <div class="out-14b"></div>
+                <div class="out-14c"></div>
+            </section>
+            <!-- end method flat -->
+
+            <!-- method flatMap -->
+            <section class="flatMap-15">
+                <h2>flatMap (стандарт ES2019)</h2>
+                <p>
+                    Исходя из названия, несложно догадаться, что делает этот
+                    метод.
+                </p>
+                <p>
+                    Сначала он вызывает mapping-функцию для каждого элемента в
+                    массиве, а потом «выравнивает» их в один массив. И всё!
+                </p>
+                <pre>
+            const sentences = [<br>
+ &nbsp;'Это предложение',<br>
+ &nbsp;'Это уже другое предложение',<br>
+ &nbsp;"Не могу ничего найти",<br>
+]<br>
+<br>
+const allWords = sentences.flatMap(sentence => sentence.split(' '))<br>
+<br>
+console.log(allWords) // ["Это", "предложение", "Это", "уже", "другое", "предложение", "Не", "могу", "ничего", "найти"]<br>
+        </pre>
+                <button class="button-primary b-15a">Результат</button>
+                <div class="out-15a"></div>
+
+                <p>
+                    В примере выше нужно получить все слова из нескольких
+                    предложений. Вместо того, чтобы сначала использовать map()
+                    для разделения предложения на слова, а потом соединять их в
+                    массив, проще сразу использовать flatMap().
+                </p>
+                <p>А ещё помощью reduce() можно подсчитать количество слов:</p>
+                <pre>
+const wordsCount = allWords.reduce((count, word) => {<br>
+ &nbsp;count[word] = count[word] ? count[word] + 1 : 1 <br>
+ &nbsp;return count <br>
+}, {}) <br>
+<br>
+console.log(wordsCount) // { "Не": 1, "Это": 2, "другое": 1, "могу": 1, "найти": 1,
+"ничего": 1, "предложение": 2, "уже": 1}
+        </pre>
+                <button class="button-primary b-15b">Результат</button>
+                <div class="out-15b"></div>
+                <p>
+                    flatMap() часто используется в Реактивном Программировании,
+                    например как вот здесь.
+                </p>
+            </section>
+            <!-- end method flatMap -->
+
+            <!-- method join -->
+            <section class="join-16">
+                <h2>join</h2>
+                <p>
+                    Используйте этот метод в том случае, если вам нужно создать
+                    строку, базируясь на элементах массива. Этот метод позволяет
+                    создать строку, соединив все элементы массива через
+                    указанный разделитель.
+                </p>
+                <p>Так, например, можно отобразить список всех участников:</p>
+                <pre>
+    const participants = ['john', 'mary', 'gary']<br>
+const participantsFormatted = participants.join(', ')<br>
+console.log(participantsFormatted) // john, mary, gary <br>
+</pre>
+                <p>
+                    А вот более практичный способ. Допустим, сначала нужно
+                    отфильтровать список участников перед соединением их имён в
+                    строку:
+                </p>
+                <pre>
+            const potentialParticipants = [<br>
+ &nbsp;{ id: 'k38i', name: 'john', age: 17 },<br>
+ &nbsp;{ id: 'baf3', name: 'mary', age: 13 },<br>
+ &nbsp;{ id: 'a111', name: 'gary', age: 24 },<br>
+ &nbsp;{ id: 'fx34', name: 'emma', age: 34 },<br>
+]<br>
+<br>
+const participantsFormatted = potentialParticipants <br>
+ &nbsp;.filter(user => user.age > 18) <br>
+ &nbsp;.map(user => user.name) <br>
+ &nbsp;.join(', ') <br>
+<br>
+console.log(participantsFormatted) // gary, emma <br>
+        </pre>
+                <button class="button-primary b-16">Результат</button>
+                <div class="out-16"></div>
+            </section>
+            <!-- end method join -->
+
+            <!-- method from -->
+            <section class="from-17">
+                <h2>from</h2>
+                <p>
+                    Это статический метод, позволяющий создать новый массив из
+                    массиво-подобных и итерабельных объектов (строка). Метод
+                    полезен при работе с DOM.
+                </p>
+                <pre>
+            const nodes = document.querySelectorAll('.todo-item') // Это экземпляр NodeList <br>
+
+const todoItems = Array.from(nodes) // Теперь можно использовать привычные map, filter и т.п. <br>
+        </pre>
+                <p>
+                    Вы заметили, что в примере выше вместо объекта массива
+                    используется Array? Именно поэтому метод from() называется
+                    статическим.
+                </p>
+                <p>
+                    С помощью forEach() можно легко повесить на каждый элемент
+                    массива обработчик событий:
+                </p>
+                <pre>
+            todoItems.forEach(item => { <br>
+ &nbsp;item.addEventListener('click', function() { <br>
+   &nbsp;&nbsp;alert(`Вы нажали на ${item.innerHTML}`) <br>
+ &nbsp;}) <br>
+}) <br>
+        </pre>
+
+                <button class="button-primary b-17">Результат</button>
+                <div class="out-17"></div>
+            </section>
+            <!-- end method from -->
+
+            <h2>Модифицирующие методы</h2>
+            <div>
+                <p>
+                    Ниже будет описана остальная часть методов массивов. Их
+                    отличия в том, что они модифицируют существующий массив, а
+                    не создают новый. В этом нет ничего плохого, просто нужно
+                    помнить про это.
+                </p>
+                <p>
+                    В случае, если вам всё же нужно сохранить оригинальный
+                    массив, можно использовать поверхностное или глубокое
+                    копирование массива:
+                </p>
+                <pre>
+            const arr = [1, 2, 3, 4, 5]<br>
+const copy = [...arr] // или arr.slice()
+        </pre>
+            </div>
+
+            <!-- method sort -->
+            <section class="sort-18">
+                <h2>sort</h2>
+                <p>
+                    Да, sort() модифицирует оригинальный массив. По умолчанию,
+                    метод преобразует все элементы в строки и выполняет их
+                    сортировку в алфавитном порядке:
+                </p>
+                <pre>
+            const names = ['john', 'mary', 'gary', 'anna']<br>
+names.sort()<br>
+console.log(names) // ['anna', 'gary', 'john', 'mary']<br>
+        </pre>
+                <button class="button-primary b-18_1">Результат</button>
+                <div class="out-18_1"></div>
+                <p>
+                    Поэтому будьте осторожны, придя, к примеру, с Python! При
+                    попытке выполнить sort для массива чисел можно получить
+                    совсем не тот результат, какой хотелось бы:
+                </p>
+                <pre>
+            const numbers = [23, 12, 17, 187, 3, 90]<br>
+numbers.sort()<br>
+console.log(numbers) // [12, 17, 187, 23, 3, 90]<br>
+        </pre>
+                <button class="button-primary b-18_2">Результат</button>
+                <div class="out-18_2"></div>
+                <p>
+                    Как же в таком случае отсортировать массив? Метод sort()
+                    принимает всего один параметр — функцию сравнения. Эта
+                    функция принимает два параметра: первый элемент (например a)
+                    и второй элемент (b). Функция сравнения этих двух элементов
+                    должна возвращать число:
+                </p>
+                <ul>
+                    <li>отрицательное, если a должно стоять перед b,</li>
+                    <li>положительное, если b должно стоять перед a,</li>
+                    <li>
+                        ноль, если значения равны и не требуют перестановки.
+                    </li>
+                </ul>
+                <p>И теперь массив чисел можно сортировать так:</p>
+                <pre>
+const numbers = [23, 12, 17, 187, 3, 90]<br>
+numbers.sort((a, b) => a - b)<br>
+console.log(numbers) // [3, 12, 17, 23, 90, 187]<br>
+        </pre>
+                <button class="button-primary b-18_3">Результат</button>
+                <div class="out-18_3"></div>
+                <p>Таким же образом можно сортировать даты (самые ранние):</p>
+                <pre>
+            const posts = [<br>
+ &nbsp;{<br>
+   &nbsp;&nbsp;title: 'Создание бота для Discord менее чем за 15 минут',<br>
+   &nbsp;&nbsp;date: new Date(2018, 11, 26),<br>
+ &nbsp;},<br>
+ &nbsp;{<br>
+   &nbsp;&nbsp;title: 'Как улучшить свой CSS',<br>
+   &nbsp;&nbsp;date: new Date(2018, 06, 17) <br>
+            &nbsp;},<br>
+ &nbsp;{<br>
+   &nbsp;&nbsp;title: 'Массивы в JavaScript',<br>
+   &nbsp;&nbsp;date: new Date()<br>
+ &nbsp;},<br>
+]<br>
+<br>
+posts.sort((a, b) => a.date - b.date) <br>
+            // Вычитание двух дат вернёт разницу между ними в миллисекундах <br>
+<br>
+console.log(posts) <br>
+// [ { title: 'Как улучшить свой CSS', date: 2018-07-17T00:00:00.000Z },<br>
+//   { title: 'Создание бота для Discord менее чем за 15 минут', date: 2018-12-26T00:00:00.000Z },<br>
+//   { title: 'Массивы в JavaScript', date: 2019-03-16T10:31:00.208Z } ]<br>
+        </pre>
+                <button class="button-primary b-18_4">Результат</button>
+                <div class="out-18_4"></div>
+            </section>
+            <!-- end method sort -->
+
+            <!-- method fill -->
+            <section class="fill-19">
+                <h2>fill</h2>
+                <p>
+                    Метод fill() изменяет или полностью заполняет массив с
+                    начальной по конечную позиции. Отличное применение — это
+                    заполнение нового массива одним статическим значением.
+                </p>
+                <pre>
+            // В подобных случаях можно было бы вызвать созданную функцию, которая генерирует ID и имёна, но зачем
+            париться :) <br>
+function fakeUser() {<br>
+ &nbsp;return {<br>
+   &nbsp;&nbsp;id: 'fe38',<br>
+   &nbsp;&nbsp;name: 'thomas',<br>
+ &nbsp;}<br>
+}<br>
+
+const posts = Array(3).fill(fakeUser()) <br>
+            <br>
+console.log(posts) <br>
+            // [{ id: "fe38", name: "thomas" },<br>
+            // { id: "fe38", name: "thomas" },<br>
+            // { id: "fe38", name: "thomas"}] <br>
+        </pre>
+                <button class="button-primary b-19">Результат</button>
+                <div class="out-19"></div>
+            </section>
+            <!-- end method fill -->
+
+            <!-- method reverse -->
+            <section class="reverse-20">
+                <h2>reverse</h2>
+                <p>Здесь всё предельно ясно:</p>
+                <pre>
+            const numbers = [1, 2, 3, 4, 5]<br>
+numbers.reverse()<br>
+            <br>
+console.log(numbers) // [5, 4, 3, 2, 1] <br>
+        </pre>
+                <button class="button-primary b-20">Результат</button>
+                <div class="out-20"></div>
+            </section>
+            <!-- end method reverse -->
+
+            <!-- method pop -->
+            <section class="pop-21">
+                <h2>pop</h2>
+                <p>
+                    Этот метод удаляет последний элемент массива и возвращает
+                    его.
+                </p>
+                <pre>
+            const messages = ['Привет', 'Эй!', 'Ты как?', "Та вроде нормально"]<br>
+const lastMessage = messages.pop()<br>
+            <br>
+console.log(messages) // ['Привет', 'Эй!', 'Ты как?']<br>
+console.log(lastMessage) // Та вроде нормально <br>
+        </pre>
+                <button class="button-primary b-21">Результат</button>
+                <div class="out-21"></div>
+                <div class="out-21_1"></div>
+            </section>
+            <!-- end method pop -->
+
+            <h2>Методы, которые можно заменить</h2>
+            <p>
+                В конце этой статьи будет рассказано о методах, которые
+                образованы из вышеописанных методов и могут быть легко заменены
+                чем-нибудь другим. Необязательно отказываться от этих методов,
+                просто помните, что есть альтернатива.
+            </p>
+
+            <!-- method push -->
+            <section class="push-22">
+                <h2>push</h2>
+                <p>
+                    При работе с массивами этот метод используется довольно
+                    часто. Фактически он добавляет один элемент в конец массива.
+                    Метод push() также иногда используется для создания нового
+                    массива на основе уже существующего.
+                </p>
+                <pre>
+            const todoItems = [1, 2, 3, 4, 5]<br>
+const itemsIncremented = []<br>
+            <br>
+for (let i = 0; i < todoItems.length; i++) {<br>
+ &nbsp;itemsIncremented.push(todoItems[i] + 1)<br>
+}<br>
+<br>
+console.log(itemsIncremented) // [2, 3, 4, 5, 6]<br>
+<br>
+const todos = ['Написание статьи', 'Вычитка']<br>
+todos.push('Публикация')<br>
+            <br>
+console.log(todos) <br>
+            // ['Написание статьи', 'Вычитка', 'Публикация']
+        </pre>
+                <p>
+                    Если вам нужно создать новый массив на основе уже
+                    существующего (как в itemsIncremented), то можно
+                    воспользоваться известными методами map(), filter(),
+                    reduce(). Например, с помощью map() создание нового массива
+                    выглядело бы так:
+                </p>
+                <p>const itemsIncremented = todoItems.map(x => x + 1)</p>
+                <p>
+                    А если нужно будет добавить новый элемент в конец массива,
+                    кроме push() можно использовать spread-оператор:
+                </p>
+                <pre>
+            const todos = ['Написание статьи', 'Вычитка'] <br>
+            <br>
+console.log([...todos, 'Публикация'])<br>
+        </pre>
+                <button class="button-primary b-22">Результат</button>
+                <div class="out-22"></div>
+            </section>
+            <!-- end method push -->
+
+            <!-- method splice -->
+            <section class="splice-23">
+                <h2>splice</h2>
+                <p>
+                    Метод используется в тех случаях, когда нужно удалить
+                    элемент где-то в середине массива. Хотя тоже самое можно
+                    сделать и с помощью filter():
+                </p>
+                <pre>
+            const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май']  <br>
+  <br>
+// С помощью splice  <br>
+months.splice(2, 1) // Удалить один элемент начиная со 2-й позиции <br>
+console.log(months) // ['Январь', 'Февраль', 'Апрель', 'Май']<br>
+<br>
+// Забыв о splice()<br>
+const monthsFiltered = months.filter((month, i) => i !== 3)<br>
+console.log(monthsFiltered) // ['Январь', 'Февраль', 'Апрель', 'Май']<br>
+        </pre>
+                <button class="button-primary b-23_1">Результат</button>
+                <div class="out-23_1a"></div>
+                <div class="out-23_1b"></div>
+                <p>
+                    Всё бы хорошо, но как в таком случае удалить несколько
+                    элементов? Используя slice(), конечно:
+                </p>
+                <pre>
+            const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май']<br>
+<br>
+// С помощью splice()<br>
+months.splice(1, 3) // Удалить 3 элемента, начиная с позиции 1 <br>
+console.log(months) // ['Январь', 'Май']<br>
+<br>
+// Забыв о splice()<br>
+const monthsFiltered = [...months.slice(0, 1), ...months.slice(4)]<br>
+console.log(monthsFiltered) // ['Январь','Май']<br>
+        </pre>
+                <button class="button-primary b-23_2">Результат</button>
+                <div class="out-23_2a"></div>
+                <div class="out-23_2b"></div>
+            </section>
+            <!-- method splice -->
+
+            <!-- method shift -->
+            <section class="shift-24">
+                <h2>shift</h2>
+                <p>
+                    Этот метод удаляет первый элемент массива и возвращает его.
+                    Подобного можно добиться с помощью spread или rest
+                    операторов:
+                </p>
+                <pre>
+            const numbers = [1, 2, 3, 4, 5]  <br>
+  <br>
+// С помощью shift()  <br>
+const firstNumber = numbers.shift()  <br>
+console.log(firstNumber) // 1  <br>
+console.log(numbers) // [2, 3, 4, 5]  <br>
+  <br>
+        </pre>
+                <button class="button-primary b-24a">Результат</button>
+                <div class="out-24a_1"></div>
+                <div class="out-24a_2"></div>
+                <pre>
+           const numbers = [1, 2, 3, 4, 5]  <br>
+  <br>
+// Забыв о shift()  <br>
+const [firstNumber, ...numbersWithoutOne] = numbers  <br>
+console.log(firstNumber) // 1 <br>
+console.log(numbersWithoutOne) // [2, 3, 4, 5] <br>
+        </pre>
+                <button class="button-primary b-24b">Результат</button>
+                <div class="out-24b_1"></div>
+                <div class="out-24b_2"></div>
+            </section>
+            <!-- end method shift -->
+
+            <!-- method unshift -->
+            <section class="unshift-25">
+                <h2>unshift</h2>
+                <p>
+                    С помощью этого метода можно добавлять элементы в начало
+                    массива. Как и в предыдущем случае, unshift() можно заменить
+                    spread-оператором:
+                </p>
+                <pre>
+// С помощью unshift <br>
+            const numbers = [3, 4, 5] <br>
+ <br>
+numbers.unshift(1, 2) <br>
+console.log(numbers) // [1, 2, 3, 4, 5] <br>
+ <br>
+            </pre>
+                <button class="button-primary b-25a">Результат</button>
+                <div class="out-25a"></div>
+                <pre>
+
+// Забыв о unshift <br>
+            const numbers = [3, 4, 5] <br>
+ <br>
+const newNumbers = [1, 2, ...numbers] <br>
+console.log(newNumbers) // [1, 2, 3, 4, 5] <br>
+        </pre>
+                <button class="button-primary b-25b">Результат</button>
+                <div class="out-25b"></div>
+            </section>
+            <!-- end method unshift -->
+
+            <h2>Важно помнить</h2>
+            <ol>
+                <li>
+                    Каждый раз, когда нужно обработать массив, не обязательно
+                    использовать циклы или изобретать велосипед. Вероятнее
+                    всего, это уже сделали за вас. Поищите подходящий метод.
+                </li>
+                <li>
+                    В большинстве случаев задачу можно будет решить с помощью
+                    методов map(), filter(), reduce() или spread-оператора.
+                </li>
+                <li>
+                    Никогда не помешает умение применять методы slice(), some(),
+                    flatMap() и тому подобные. Используйте их, когда это будет
+                    целесообразно.
+                </li>
+                <li>
+                    Всегда помните, какие из методов создают новый массив, а
+                    какие модифицируют уже существующий. Иначе можно наломать
+                    дров.
+                </li>
+                <li>
+                    Метод slice() и spread-оператор делают поверхностную копию
+                    массива. Поэтому массивы и подмассивы будут ссылаться на
+                    один и тот же объект в памяти.
+                </li>
+                <li>
+                    «Старые» методы, изменяющие массив, имеют современные
+                    аналоги. Тщательно выбирайте используемые методы.
+                </li>
+            </ol>
+
+            <p class="origin">
+                Перевод статьи
+                <a
+                    href="https://medium.freecodecamp.org/what-you-should-know-about-javascript-arrays-a7e5394f78f8"
+                    data-wpel-link="external"
+                    target="_blank"
+                    rel="nofollow noopener noreferrer"
+                    >«What you should know about JavaScript arrays»</a
+                >
+            </p>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
